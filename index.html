@@ -1286,6 +1286,30 @@
             transform: translateY(-2px) scale(1.02);
         }
 
+        /* ====== BARCODE SCANNER CANCEL BUTTON ====== */
+        .scanner-cancel {
+            margin-top: 10px;
+            background: #e0e0e0;
+            border: 2px solid #999;
+            color: #333;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .scanner-cancel:hover {
+            background: #d0d0d0;
+            border-color: #666;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .scanner-cancel:active {
+            transform: scale(0.98);
+        }
+
         /* ====== RESPONSIVE ====== */
         @media (max-width: 1200px) {
               .book {
@@ -1507,7 +1531,8 @@
     flex-direction: column;
     background: linear-gradient(135deg, rgba(255, 249, 240, 0.95), rgba(255, 238, 221, 0.95));
     border-radius: 25px;
-    overflow: hidden;
+      overflow-y: auto;   /* CHANGE THIS */
+  -webkit-overflow-scrolling: touch;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
@@ -2879,6 +2904,19 @@ body {
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 768px) {
+  .book-controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    gap: 12px;
+  }
+
+  .book-nav {
+    min-width: auto;
+    padding: 10px 14px;
+  }
+}
 
 
     </style>
@@ -3272,7 +3310,7 @@ body {
                     <button class="book-nav prev" onclick="flipToPrevPage()">
                         <i class="fas fa-chevron-left"></i> Previous
                     </button>
-                    <!--<span class="page-counter" id="pageCounter">Page 1 of 1</span>-->
+                   <!-- <span class="page-counter" id="pageCounter">Page 1 of 1</span> -->
                     <button class="book-nav next" onclick="flipToNextPage()">
                         Next <i class="fas fa-chevron-right"></i>
                     </button>
@@ -3397,9 +3435,12 @@ body {
                     Hold your phone steady and align the barcode with the green frame.
                 </p>
                 
-                <div style="display: flex; gap: 15px; justify-content: center;">
+                <div style="display: flex; gap: 15px; justify-content: center; flex-direction: column;">
                     <button class="modal-btn" onclick="startBarcodeScan()" id="startScanBtn">
                         <i class="fas fa-play"></i> Start Scanning
+                    </button>
+                    <button class="scanner-cancel" onclick="stopBarcodeScan()">
+                        ✕ Cancel Scanning
                     </button>
                 </div>
             </div>
@@ -5168,10 +5209,16 @@ let currentSpreadIndex = 0; // each spread = 2 recipes
             document.getElementById('startScanBtn').innerHTML = '<i class="fas fa-play"></i> Start Scanning';
             document.getElementById('startScanBtn').onclick = startBarcodeScan;
             
+            // Explicitly stop all camera tracks
             if (barcodeStream) {
-                barcodeStream.getTracks().forEach(track => track.stop());
+                barcodeStream.getTracks().forEach(track => {
+                    track.stop();
+                });
                 barcodeStream = null;
             }
+            
+            // Close the modal
+            document.getElementById('barcodeModal').classList.remove('active');
         }
 
         function simulateBarcodeDetection() {
@@ -6978,6 +7025,6 @@ document.addEventListener('DOMContentLoaded', function() {
         window.initMap = initMap;
     </script>
 
-
 </body>
+
 
