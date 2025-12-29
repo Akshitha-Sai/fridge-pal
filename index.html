@@ -2869,6 +2869,16 @@ body {
     line-height: 1.6;
     opacity: 0.85;
 }
+@media (max-width: 768px) {
+  .ingredients-container {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid,
+  .items-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 
     </style>
@@ -6967,5 +6977,6 @@ document.addEventListener('DOMContentLoaded', function() {
         window.loadShoppingList = loadShoppingList;
         window.initMap = initMap;
     </script>
+
 
 </body>
